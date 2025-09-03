@@ -102,7 +102,8 @@ def depthFirstSearch(problem: SearchProblem):
         print("These are the successors", successors)
         for i in successors:
             newState = i[0]
-            newPath = currPath.append(i[1])
+            newPath = currPath.copy()
+            newPath.append(i[1])
             stack.push([newState, newPath])
     return False
 
