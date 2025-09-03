@@ -92,20 +92,21 @@ def depthFirstSearch(problem: SearchProblem):
     if (problem.isGoalState(currState)):
         return []
     stack.push([currState, currPath])
-    while (stack.isEmpty() is not True): 
+    hasVisitedList = []
+    while (True): 
         currState, currPath = stack.pop()
-        print("Curently looking at", currState)
-        print("Curently looking at", currPath)
+        if (hasVisitedList.__contains__(currState)):
+            break
+        hasVisitedList.append(currState)
         if (problem.isGoalState(currState)):
             return currPath
         successors = problem.getSuccessors(currState)
-        print("These are the successors", successors)
         for i in successors:
             newState = i[0]
             newPath = currPath.copy()
             newPath.append(i[1])
             stack.push([newState, newPath])
-    return False
+    return []
 
 def breadthFirstSearch(problem: SearchProblem):
     """Search the shallowest nodes in the search tree first."""
