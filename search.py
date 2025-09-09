@@ -112,12 +112,37 @@ def depthFirstSearch(problem: SearchProblem):
             newPath = currPath.copy()
             newPath.append(i[1])
             stack.push([newState, newPath])
-    return []
 
 def breadthFirstSearch(problem: SearchProblem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    
+    currState: SearchProblem = problem.getStartState()
+    currPath = []
+    queue = util.Queue()
+    if (problem.isGoalState(currState)):
+        return []
+    queue.push([currState, currPath])
+    hasVisitedList = []
+    while (True): 
+        currState, currPath = queue.pop()
+        #print("current state: ")
+        #print(currState)
+        #print("current path")
+        print(currPath)
+        if (hasVisitedList.__contains__(currState)):
+            #print("Info: Continue the while loop")
+            continue #should not break the loop
+        hasVisitedList.append(currState)
+        if (problem.isGoalState(currState)):
+            return currPath
+        successors = problem.getSuccessors(currState)
+        for i in successors:
+            #maybe test already here if successor has alreday been visited?
+            newState = i[0]
+            newPath = currPath.copy()
+            newPath.append(i[1])
+            queue.push([newState, newPath])
 
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
