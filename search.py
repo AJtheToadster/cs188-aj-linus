@@ -126,9 +126,6 @@ def breadthFirstSearch(problem: SearchProblem):
     hasVisitedList = []
     while (True): 
         currState, currPath = queue.pop()
-        #print("current state: ")
-        #print(currState)
-        #print("current path")
         print(currPath)
         if (hasVisitedList.__contains__(currState)):
             continue
@@ -144,7 +141,6 @@ def breadthFirstSearch(problem: SearchProblem):
 
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
     currState: SearchProblem = problem.getStartState()
     currPath = []
     priorityQueue = util.PriorityQueue()
@@ -154,9 +150,6 @@ def uniformCostSearch(problem: SearchProblem):
     hasVisitedList = []
     while (True): 
         currState, currPath = priorityQueue.pop()
-        #print("current state: ")
-        #print(currState)
-        #print("current path")
         print(currPath)
         if (hasVisitedList.__contains__(currState)):
             continue
@@ -181,8 +174,29 @@ def nullHeuristic(state, problem=None):
 
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    currState: SearchProblem = problem.getStartState()
+    currPath = []
+    priorityQueue = util.PriorityQueue()
+    if (problem.isGoalState(currState)):
+        return []
+    priorityQueue.push([currState, currPath], 0 )
+    hasVisitedList = []
+    while (True): 
+        currState, currPath = priorityQueue.pop()
+        print(currPath)
+        if (hasVisitedList.__contains__(currState)):
+            continue
+        hasVisitedList.append(currState)
+        if (problem.isGoalState(currState)):
+            return currPath
+        successors = problem.getSuccessors(currState)
+        for i in successors:
+            print(i)
+            newState = i[0]
+            newPath = currPath.copy()
+            newPath.append(i[1])
+            cost = problem.getCostOfActions(newPath) + heuristic(newState, problem) #+ cost of the heuristic
+            priorityQueue.push([newState, newPath], cost)
 
 
 # Abbreviations
