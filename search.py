@@ -95,13 +95,19 @@ def depthFirstSearch(problem: SearchProblem):
     hasVisitedList = []
     while (True): 
         currState, currPath = stack.pop()
+        #print("current state: ")
+        #print(currState)
+        #print("current path")
+        print(currPath)
         if (hasVisitedList.__contains__(currState)):
-            break
+            #print("Info: Continue the while loop")
+            continue #should not break the loop
         hasVisitedList.append(currState)
         if (problem.isGoalState(currState)):
             return currPath
         successors = problem.getSuccessors(currState)
         for i in successors:
+            #maybe test already here if successor has alreday been visited?
             newState = i[0]
             newPath = currPath.copy()
             newPath.append(i[1])
