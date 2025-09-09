@@ -131,14 +131,12 @@ def breadthFirstSearch(problem: SearchProblem):
         #print("current path")
         print(currPath)
         if (hasVisitedList.__contains__(currState)):
-            #print("Info: Continue the while loop")
-            continue #should not break the loop
+            continue
         hasVisitedList.append(currState)
         if (problem.isGoalState(currState)):
             return currPath
         successors = problem.getSuccessors(currState)
         for i in successors:
-            #maybe test already here if successor has alreday been visited?
             newState = i[0]
             newPath = currPath.copy()
             newPath.append(i[1])
@@ -147,7 +145,32 @@ def breadthFirstSearch(problem: SearchProblem):
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    currState: SearchProblem = problem.getStartState()
+    currPath = []
+    priorityQueue = util.PriorityQueue()
+    if (problem.isGoalState(currState)):
+        return []
+    priorityQueue.push([currState, currPath], 0 )
+    hasVisitedList = []
+    while (True): 
+        currState, currPath = priorityQueue.pop()
+        #print("current state: ")
+        #print(currState)
+        #print("current path")
+        print(currPath)
+        if (hasVisitedList.__contains__(currState)):
+            continue
+        hasVisitedList.append(currState)
+        if (problem.isGoalState(currState)):
+            return currPath
+        successors = problem.getSuccessors(currState)
+        for i in successors:
+            print(i)
+            newState = i[0]
+            newPath = currPath.copy()
+            newPath.append(i[1])
+            cost = problem.getCostOfActions(newPath)
+            priorityQueue.push([newState, newPath], cost)
 
 def nullHeuristic(state, problem=None):
     """
