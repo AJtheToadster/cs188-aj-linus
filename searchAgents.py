@@ -506,7 +506,7 @@ def foodHeuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     listOfFoodPos = foodGrid.asList()
     maxDist = 0
     for food in listOfFoodPos:
-        currDist = abs(position[0] - food[0]) + abs(position[1] - food[1])
+        currDist = mazeDistance(position, food, problem.startingGameState)
         maxDist = max(maxDist, currDist)
     return maxDist + listOfFoodPos.__len__()
 
