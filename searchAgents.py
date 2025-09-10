@@ -390,49 +390,30 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
     closestFoodToCurrentFood = None
     intFoodToGet = foodCornersToVisit.__len__()
 
-    if intFoodToGet == 
-
-    #Add dist from Food to next food
-    i = 0
-    while (intFoodToGet >= 2):
-        lookingAtCorner = foodCornersToVisit[i]
-        for corner2 in foodCornersToVisit:
-            if lookingAtCorner != corner2:
-                distFoodToFood = abs(corner2[0] - lookingAtCorner[0]) + abs(corner2[1] - lookingAtCorner[1])
-                if (foodToFoodCache > distFoodToFood):
-                    closestFoodToCurrentFood = corner2
+    def getDistance(cornersLeft: Any, myPos: any):
+        foodToFoodCache = 999999
+        for corner in cornersLeft:
+            distFoodToFood = abs(corner[0] - myPos[0]) + abs(corner[1] - myPos[1])
+            if (foodToFoodCache > distFoodToFood):
+                    closestFoodToCurrentFood = corner
                     foodToFoodCache = distFoodToFood
-        foodCornersToVisit.remove(closestFoodToCurrentFood)
-        minFoodToFoodDist += foodToFoodCache
-        foodToFoodCache = 999999
-        i = i + 1
-        intFoodToGet = foodCornersToVisit.__len__()
+        return closestFoodToCurrentFood, foodToFoodCache
 
-
-
-
-
-
-
-
-
-
-
-
-    """for corner in cornersCopy:
-        for corner2 in foodCornersToVisit:
-            if corner == corner2:
-                continue
-            if(foodToFoodCache > abs(corner2[0] - corner[0]) + abs(corner2[1] - corner[1])):
-                foodToFoodCache = abs(corner2[0] - corner[0]) + abs(corner2[1] - corner[1])
-                toDelete = corner
-        cornersCopy = foodCornersToVisit
-        minFoodToFoodDist += foodToFoodCache
-        foodCornersToVisit.remove(toDelete)
-        foodToFoodCache = 999999
     
-    if (minDistPacToFood == 999999):
-        print(minDistPacToFood, foodCornersToVisit)"""
+    #Add dist from Food to next food
+    if intFoodToGet == 0:
+        return minDistPacToFood
+        
+        
+    while(True):
+        closestFood, minDistToCurrentFood = getDistance(foodCornersToVisit, closestFood)
+        minFoodToFoodDist += minDistToCurrentFood
+        foodCornersToVisit.remove(closestFood)
+        intFoodToGet = foodCornersToVisit.__len__()
+        if intFoodToGet <= 1:
+            break
+
+    
     return minFoodToFoodDist + minDistPacToFood # Default to trivial solution
 
 class AStarCornersAgent(SearchAgent):
