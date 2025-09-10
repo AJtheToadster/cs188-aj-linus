@@ -508,7 +508,7 @@ def foodHeuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     for food in listOfFoodPos:
         currDist = abs(position[0] - food[0]) + abs(position[1] - food[1])
         maxDist = max(maxDist, currDist)
-    return maxDist
+    return maxDist + listOfFoodPos.__len__()
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
