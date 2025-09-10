@@ -370,14 +370,15 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
     minDistPacToFood = 999999
 
 
-    for foodfoodCornersVisisted not in corners:
-        foodCornersToVisit.add(foodfoodCornersVisisted)
+    for corner in corners:
+        if not corner in foodCornersVisisted:
+            foodCornersToVisit.append(corner)
+    for corner in foodCornersToVisit:
+        currentDistancePacFood = abs(pacPos[0] - corner[0]) + abs(pacPos[1] - corner[1])
+        if minDistPacToFood > (currentDistancePacFood):
+            minDistPacToFood = currentDistancePacFood
     
-    currentDistancePacFood = abs(pacPos[0] - foodCornersToVisit[0]) + abs(pacPos[1] - foodCornersToVisit[1])
-    if minDistPacToFood > (currentDistancePacFood):
-        minDistPacToFood = currentDistancePacFood
-
-    return 0 # Default to trivial solution
+    return minDistPacToFood # Default to trivial solution
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
