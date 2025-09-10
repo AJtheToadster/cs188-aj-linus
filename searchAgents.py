@@ -356,11 +356,27 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
     This function should always return a number that is a lower bound on the
     shortest path from the state to a goal of the problem; i.e.  it should be
     admissible (as well as consistent).
+
+    Linus first idea: return: MHdist(Pac, nearst uneaten food corner)
     """
+
+
     corners = problem.corners # These are the corner coordinates
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
-    "*** YOUR CODE HERE ***"
+    pacPos = state[0]
+    foodCornersVisisted = state[1]
+    foodCornersToVisit = []
+    minDistPacToFood = 999999
+
+
+    for foodfoodCornersVisisted not in corners:
+        foodCornersToVisit.add(foodfoodCornersVisisted)
+    
+    currentDistancePacFood = abs(pacPos[0] - foodCornersToVisit[0]) + abs(pacPos[1] - foodCornersToVisit[1])
+    if minDistPacToFood > (currentDistancePacFood):
+        minDistPacToFood = currentDistancePacFood
+
     return 0 # Default to trivial solution
 
 class AStarCornersAgent(SearchAgent):
