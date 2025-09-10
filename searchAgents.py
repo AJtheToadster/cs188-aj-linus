@@ -399,11 +399,8 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
                     foodToFoodCache = distFoodToFood
         return closestFoodToCurrentFood, foodToFoodCache
 
-    
-    #Add dist from Food to next food
     if intFoodToGet == 0:
-        return minDistPacToFood
-        
+        return minDistPacToFood     
         
     while(True):
         closestFood, minDistToCurrentFood = getDistance(foodCornersToVisit, closestFood)
@@ -413,8 +410,7 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
         if intFoodToGet <= 1:
             break
 
-    
-    return minFoodToFoodDist + minDistPacToFood # Default to trivial solution
+    return minFoodToFoodDist + minDistPacToFood
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
@@ -507,8 +503,12 @@ def foodHeuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     problem.heuristicInfo['wallCount']
     """
     position, foodGrid = state
-    "*** YOUR CODE HERE ***"
-    return 0
+    listOfFoodPos = foodGrid.asList()
+    maxDist = 0
+    for food in listOfFoodPos:
+        currDist = abs(position[0] - food[0]) + abs(position[1] - food[1])
+        maxDist = max(maxDist, currDist)
+    return maxDist
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
