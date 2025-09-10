@@ -142,7 +142,6 @@ def uniformCostSearch(problem: SearchProblem):
     hasVisitedList = []
     while (True): 
         currState, currPath = priorityQueue.pop()
-        print(currPath)
         if (hasVisitedList.__contains__(currState)):
             continue
         hasVisitedList.append(currState)
@@ -150,7 +149,6 @@ def uniformCostSearch(problem: SearchProblem):
             return currPath
         successors = problem.getSuccessors(currState)
         for i in successors:
-            print(i)
             newState = i[0]
             newPath = currPath.copy()
             newPath.append(i[1])
@@ -175,7 +173,6 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     hasVisitedList = []
     while (True): 
         currState, currPath = priorityQueue.pop()
-        print(currPath)
         if (hasVisitedList.__contains__(currState)):
             continue
         hasVisitedList.append(currState)
@@ -183,7 +180,6 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
             return currPath
         successors = problem.getSuccessors(currState)
         for i in successors:
-            print(i)
             newState = i[0]
             newPath = currPath.copy()
             newPath.append(i[1])

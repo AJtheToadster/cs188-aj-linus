@@ -368,17 +368,72 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
     foodCornersVisisted = state[1]
     foodCornersToVisit = []
     minDistPacToFood = 999999
+    closestFood = None
 
+    if(problem.isGoalState(state)):
+        return 0
 
     for corner in corners:
         if not corner in foodCornersVisisted:
             foodCornersToVisit.append(corner)
+
+    #Calculate Dist between Pac and closed food
     for corner in foodCornersToVisit:
         currentDistancePacFood = abs(pacPos[0] - corner[0]) + abs(pacPos[1] - corner[1])
         if minDistPacToFood > (currentDistancePacFood):
             minDistPacToFood = currentDistancePacFood
+            closestFood = corner
     
-    return minDistPacToFood # Default to trivial solution
+    foodCornersToVisit.remove(closestFood)
+    foodToFoodCache = 999999
+    minFoodToFoodDist = 0
+    closestFoodToCurrentFood = None
+    intFoodToGet = foodCornersToVisit.__len__()
+
+    if intFoodToGet == 
+
+    #Add dist from Food to next food
+    i = 0
+    while (intFoodToGet >= 2):
+        lookingAtCorner = foodCornersToVisit[i]
+        for corner2 in foodCornersToVisit:
+            if lookingAtCorner != corner2:
+                distFoodToFood = abs(corner2[0] - lookingAtCorner[0]) + abs(corner2[1] - lookingAtCorner[1])
+                if (foodToFoodCache > distFoodToFood):
+                    closestFoodToCurrentFood = corner2
+                    foodToFoodCache = distFoodToFood
+        foodCornersToVisit.remove(closestFoodToCurrentFood)
+        minFoodToFoodDist += foodToFoodCache
+        foodToFoodCache = 999999
+        i = i + 1
+        intFoodToGet = foodCornersToVisit.__len__()
+
+
+
+
+
+
+
+
+
+
+
+
+    """for corner in cornersCopy:
+        for corner2 in foodCornersToVisit:
+            if corner == corner2:
+                continue
+            if(foodToFoodCache > abs(corner2[0] - corner[0]) + abs(corner2[1] - corner[1])):
+                foodToFoodCache = abs(corner2[0] - corner[0]) + abs(corner2[1] - corner[1])
+                toDelete = corner
+        cornersCopy = foodCornersToVisit
+        minFoodToFoodDist += foodToFoodCache
+        foodCornersToVisit.remove(toDelete)
+        foodToFoodCache = 999999
+    
+    if (minDistPacToFood == 999999):
+        print(minDistPacToFood, foodCornersToVisit)"""
+    return minFoodToFoodDist + minDistPacToFood # Default to trivial solution
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
