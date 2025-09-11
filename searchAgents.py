@@ -505,7 +505,6 @@ def foodHeuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     position, foodGrid = state
     listOfFoodPos = foodGrid.asList()
     maxDist = 0
-    
     if problem.isGoalState(state):
         return 0
     
@@ -543,8 +542,7 @@ class ClosestDotSearchAgent(SearchAgent):
         food = gameState.getFood()
         walls = gameState.getWalls()
         problem = AnyFoodSearchProblem(gameState)
-
-        return search.astar(problem, foodHeuristic)
+        return search.bfs(problem)
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -578,12 +576,7 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         complete the problem definition.
         """
         x,y = state
-        totalFood = 0
-        for i in self.food:
-            for j in i:
-                if j:
-                    totalFood += 1
-        return totalFood == 0
+        return self.food[x][y]
 
 def mazeDistance(point1: Tuple[int, int], point2: Tuple[int, int], gameState: pacman.GameState) -> int:
     """
