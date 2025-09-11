@@ -538,8 +538,7 @@ class ClosestDotSearchAgent(SearchAgent):
         walls = gameState.getWalls()
         problem = AnyFoodSearchProblem(gameState)
 
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return search.astar(problem, foodHeuristic)
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -573,9 +572,12 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         complete the problem definition.
         """
         x,y = state
-
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        totalFood = 0
+        for i in self.food:
+            for j in i:
+                if j:
+                    totalFood += 1
+        return totalFood == 0
 
 def mazeDistance(point1: Tuple[int, int], point2: Tuple[int, int], gameState: pacman.GameState) -> int:
     """
