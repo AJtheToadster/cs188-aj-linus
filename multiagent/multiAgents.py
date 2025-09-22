@@ -19,6 +19,16 @@ import random, util
 from game import Agent
 from pacman import GameState
 
+def getClosestFood(pacPos: tuple, foodArray: list):
+    closestDist = 9999999999
+    for food in foodArray:
+        currDist = manhattanDistance(pacPos, food)
+        if  closestDist > currDist:
+            closestDist = currDist
+    if closestDist == 9999999999:
+        return 0
+    return closestDist
+
 class ReflexAgent(Agent):
     """
     A reflex agent chooses an action at each choice point by examining
@@ -51,7 +61,7 @@ class ReflexAgent(Agent):
         "Add more of your code here if you want to"
 
         return legalMoves[chosenIndex]
-
+    
     def evaluationFunction(self, currentGameState: GameState, action):
         """
         Design a better evaluation function here.
@@ -71,11 +81,19 @@ class ReflexAgent(Agent):
         successorGameState = currentGameState.generatePacmanSuccessor(action)
         newPos = successorGameState.getPacmanPosition()
         newFood = successorGameState.getFood()
+        foodList = newFood.asList()
         newGhostStates = successorGameState.getGhostStates()
         newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
-
+        # print(successorGameState)
+        # print(newPos)
+        # print(newFood)
+        # print(newGhostStates)
+        # print(newScaredTimes)
+        print(getClosestFood(newPos, foodList))
+        evaluation = successorGameState.getScore() - getClosestFood(newPos, foodList) * 0.1 + sum(newScaredTimes) - foodList.__len__() * 3
+        print(evaluation)
         "*** YOUR CODE HERE ***"
-        return successorGameState.getScore()
+        return evaluation
 
 def scoreEvaluationFunction(currentGameState: GameState):
     """
