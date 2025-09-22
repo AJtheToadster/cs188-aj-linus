@@ -84,15 +84,9 @@ class ReflexAgent(Agent):
         foodList = newFood.asList()
         newGhostStates = successorGameState.getGhostStates()
         newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
-        # print(successorGameState)
-        # print(newPos)
-        # print(newFood)
-        # print(newGhostStates)
-        # print(newScaredTimes)
         print(getClosestFood(newPos, foodList))
         evaluation = successorGameState.getScore() - getClosestFood(newPos, foodList) * 0.1 + sum(newScaredTimes) - foodList.__len__() * 3
         print(evaluation)
-        "*** YOUR CODE HERE ***"
         return evaluation
 
 def scoreEvaluationFunction(currentGameState: GameState):
@@ -129,8 +123,17 @@ class MinimaxAgent(MultiAgentSearchAgent):
     """
     Your minimax agent (question 2)
     """
+    def value(gameState: GameState):
+        if gameState.isLose() or gameState.isWin():
+            return gameState.getScore()
+        if nextAgent == 0:
+            return maxValue()
+        else
+            return minValue()
 
     def getAction(self, gameState: GameState):
+        numAgents = gameState.getNumAgents()
+
         """
         Returns the minimax action from the current gameState using self.depth
         and self.evaluationFunction.
@@ -144,17 +147,21 @@ class MinimaxAgent(MultiAgentSearchAgent):
         gameState.generateSuccessor(agentIndex, action):
         Returns the successor game state after an agent takes an action
 
-        gameState.getNumAgents():
-        Returns the total number of agents in the game
-
-        gameState.isWin():
-        Returns whether or not the game state is a winning state
-
+        
         gameState.isLose():
         Returns whether or not the game state is a losing state
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+
+        legalMoves = gameState.getLegalActions(0)
+
+        # Choose one of the best actions
+        scores = [max-value(gameState, action) for action in legalMoves]
+
+        if not gameState.isWin():
+            int = 0
+
+
+        return legalMoves[0]
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
     """
