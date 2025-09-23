@@ -216,6 +216,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
             if currValue > highestValue:
                 highestValue = currValue
                 highestMove = move
+            alpha = max(highestValue, alpha)
         return highestMove
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
@@ -238,6 +239,7 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
             if currValue > highestValue:
                 highestValue = currValue
                 highestMove = move
+            alpha = max(alpha, currValue)
         return highestMove
 
 class ExpectimaxAgent(MultiAgentSearchAgent):
