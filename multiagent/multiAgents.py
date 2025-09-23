@@ -216,7 +216,6 @@ class MinimaxAgent(MultiAgentSearchAgent):
             if currValue > highestValue:
                 highestValue = currValue
                 highestMove = move
-            alpha = max(highestValue, alpha)
         return highestMove
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
@@ -241,6 +240,35 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
                 highestMove = move
             alpha = max(alpha, currValue)
         return highestMove
+    
+def exptimaxValue(gameState: GameState, agentIndex: int, depth: int):
+    if agentIndex >= gameState.getNumAgents():
+        agentIndex = 0
+        depth -= 1
+
+    if gameState.isWin() or gameState.isLose() or depth == 0:
+        return scoreEvaluationFunction(gameState)
+
+    if agentIndex == 0:
+        return expMaxValue(gameState, agentIndex, depth)
+    return expValue(gameState, agentIndex, depth)
+
+def expMaxValue(gameState: GameState, agentIndex: int, depth: int):
+    v = -99999999
+    legalMoves = gameState.getLegalActions(agentIndex)
+    for move in legalMoves:
+        successorState = gameState.generateSuccessor(agentIndex, move)
+        v = max(v, exptimaxValue(successorState, agentIndex + 1, depth))
+    return v
+
+def expValue(gameState: GameState, agentIndex: int, depth: int):
+    v = 0
+    legalMoves = gameState.getLegalActions(agentIndex)
+    for move in legalMoves:
+        successorState = gameState.generateSuccessor(agentIndex, move)
+        p = (1 / legalMoves.__len__())
+        v += p * exptimaxValue(successorState, agentIndex + 1, depth)
+    return v  
 
 class ExpectimaxAgent(MultiAgentSearchAgent):
     """
@@ -255,7 +283,16 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
         legal moves.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        legalMoves = gameState.getLegalActions(0)
+        highestValue = -999999999999
+        highestMove = None
+        for move in legalMoves:
+            successorState = gameState.generateSuccessor(0, move)
+            currValue = exptimaxValue(successorState, 1, self.depth)
+            if currValue > highestValue:
+                highestValue = currValue
+                highestMove = move
+        return highestMove
 
 def betterEvaluationFunction(currentGameState: GameState):
     """
