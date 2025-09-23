@@ -98,7 +98,33 @@ def scoreEvaluationFunction(currentGameState: GameState):
     (not reflex agents).
     """
     return currentGameState.getScore()
+def value(gameState: GameState, agentIndex: int, depth: int):
+    if gameState.isWin() or gameState.isLose() or depth == 0:
+        return scoreEvaluationFunction(gameState)
+    if agentIndex > gameState.getNumAgents():
+        agentIndex = 0
 
+    if agentIndex == 0:
+        return maxValue(gameState, agentIndex, depth)
+        
+    return minValue(gameState, agentIndex, depth)
+
+def maxValue(gameState: GameState, agentIndex: int, depth: int):
+    v = -99999999
+    legalMoves = gameState.getLegalActions(agentIndex)
+    for move in legalMoves:
+        successorState = gameState.generateSuccessor(agentIndex, move)
+        v = max(v, value(successorState, agentIndex + 1, depth - 1))
+    return v
+    
+def minValue(gameState: GameState, agentIndex: int, depth: int):
+    v = 99999999
+    legalMoves = gameState.getLegalActions(agentIndex)
+    for move in legalMoves:
+        successorState = gameState.generateSuccessor(agentIndex, move)
+        v = min(v, value(successorState, agentIndex + 1, depth))
+    return v
+    
 class MultiAgentSearchAgent(Agent):
     """
     This class provides some common elements to all of your
@@ -118,21 +144,12 @@ class MultiAgentSearchAgent(Agent):
         self.index = 0 # Pacman is always agent index 0
         self.evaluationFunction = util.lookup(evalFn, globals())
         self.depth = int(depth)
-
+    
 class MinimaxAgent(MultiAgentSearchAgent):
     """
     Your minimax agent (question 2)
     """
-    def value(gameState: GameState):
-        if gameState.isLose() or gameState.isWin():
-            return gameState.getScore()
-        if nextAgent == 0:
-            return maxValue()
-        else
-            return minValue()
-
     def getAction(self, gameState: GameState):
-        numAgents = gameState.getNumAgents()
 
         """
         Returns the minimax action from the current gameState using self.depth
@@ -151,17 +168,17 @@ class MinimaxAgent(MultiAgentSearchAgent):
         gameState.isLose():
         Returns whether or not the game state is a losing state
         """
-
         legalMoves = gameState.getLegalActions(0)
-
+        highestValue = 0
+        highestMove = None
+        for move in legalMoves:
+            successorState = gameState.generateSuccessor(0, move)
+            currValue = value(successorState, 1, self.depth)
+            if currValue > highestValue:
+                highestValue = currValue
+                highestMove = move
         # Choose one of the best actions
-        scores = [max-value(gameState, action) for action in legalMoves]
-
-        if not gameState.isWin():
-            int = 0
-
-
-        return legalMoves[0]
+        return highestMove
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
     """
