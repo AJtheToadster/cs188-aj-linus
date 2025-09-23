@@ -99,15 +99,15 @@ def scoreEvaluationFunction(currentGameState: GameState):
     """
     return currentGameState.getScore()
 def value(gameState: GameState, agentIndex: int, depth: int):
-    if gameState.isWin() or gameState.isLose() or depth == 0:
-        return scoreEvaluationFunction(gameState)
     if agentIndex >= gameState.getNumAgents():
         agentIndex = 0
         depth -= 1
+    if gameState.isWin() or gameState.isLose() or depth == 0:
+        return scoreEvaluationFunction(gameState)
+    
 
     if agentIndex == 0:
         return maxValue(gameState, agentIndex, depth)
-        
     return minValue(gameState, agentIndex, depth)
 
 def maxValue(gameState: GameState, agentIndex: int, depth: int):
@@ -116,7 +116,6 @@ def maxValue(gameState: GameState, agentIndex: int, depth: int):
     for move in legalMoves:
         successorState = gameState.generateSuccessor(agentIndex, move)
         v = max(v, value(successorState, agentIndex + 1, depth))
-    print('max: ', v)
     return v
     
 def minValue(gameState: GameState, agentIndex: int, depth: int):
@@ -125,8 +124,6 @@ def minValue(gameState: GameState, agentIndex: int, depth: int):
     for move in legalMoves:
         successorState = gameState.generateSuccessor(agentIndex, move)
         v = min(v, value(successorState, agentIndex + 1, depth))
-    
-    print('min: ', v)
     return v
     
 class MultiAgentSearchAgent(Agent):
@@ -181,8 +178,6 @@ class MinimaxAgent(MultiAgentSearchAgent):
             if currValue > highestValue:
                 highestValue = currValue
                 highestMove = move
-            print('curr v:', currValue)
-        print(highestValue, highestMove)
         return highestMove
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
