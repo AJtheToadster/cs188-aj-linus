@@ -25,7 +25,7 @@ def getClosestFood(pacPos: tuple, foodArray: list):
         currDist = manhattanDistance(pacPos, food)
         if  closestDist > currDist:
             closestDist = currDist
-    if closestDist == 9999999999:
+    if closestDist == 9999999999 or 1:
         return 0
     return closestDist
 
