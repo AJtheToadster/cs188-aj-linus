@@ -101,8 +101,9 @@ def scoreEvaluationFunction(currentGameState: GameState):
 def value(gameState: GameState, agentIndex: int, depth: int):
     if gameState.isWin() or gameState.isLose() or depth == 0:
         return scoreEvaluationFunction(gameState)
-    if agentIndex > gameState.getNumAgents():
+    if agentIndex >= gameState.getNumAgents():
         agentIndex = 0
+        depth -= 1
 
     if agentIndex == 0:
         return maxValue(gameState, agentIndex, depth)
@@ -114,7 +115,8 @@ def maxValue(gameState: GameState, agentIndex: int, depth: int):
     legalMoves = gameState.getLegalActions(agentIndex)
     for move in legalMoves:
         successorState = gameState.generateSuccessor(agentIndex, move)
-        v = max(v, value(successorState, agentIndex + 1, depth - 1))
+        v = max(v, value(successorState, agentIndex + 1, depth))
+    print('max: ', v)
     return v
     
 def minValue(gameState: GameState, agentIndex: int, depth: int):
@@ -123,6 +125,8 @@ def minValue(gameState: GameState, agentIndex: int, depth: int):
     for move in legalMoves:
         successorState = gameState.generateSuccessor(agentIndex, move)
         v = min(v, value(successorState, agentIndex + 1, depth))
+    
+    print('min: ', v)
     return v
     
 class MultiAgentSearchAgent(Agent):
@@ -169,7 +173,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
         Returns whether or not the game state is a losing state
         """
         legalMoves = gameState.getLegalActions(0)
-        highestValue = 0
+        highestValue = -999999999999
         highestMove = None
         for move in legalMoves:
             successorState = gameState.generateSuccessor(0, move)
@@ -177,7 +181,8 @@ class MinimaxAgent(MultiAgentSearchAgent):
             if currValue > highestValue:
                 highestValue = currValue
                 highestMove = move
-        # Choose one of the best actions
+            print('curr v:', currValue)
+        print(highestValue, highestMove)
         return highestMove
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
