@@ -241,40 +241,40 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
             alpha = max(alpha, currValue)
         return highestMove
     
-def exptimaxValue(gameState: GameState, agentIndex: int, depth: int):
-    if agentIndex >= gameState.getNumAgents():
-        agentIndex = 0
-        depth -= 1
-
-    if gameState.isWin() or gameState.isLose() or depth == 0:
-        return scoreEvaluationFunction(gameState)
-
-    if agentIndex == 0:
-        return expMaxValue(gameState, agentIndex, depth)
-    return expValue(gameState, agentIndex, depth)
-
-def expMaxValue(gameState: GameState, agentIndex: int, depth: int):
-    v = -99999999
-    legalMoves = gameState.getLegalActions(agentIndex)
-    for move in legalMoves:
-        successorState = gameState.generateSuccessor(agentIndex, move)
-        v = max(v, exptimaxValue(successorState, agentIndex + 1, depth))
-    return v
-
-def expValue(gameState: GameState, agentIndex: int, depth: int):
-    v = 0
-    legalMoves = gameState.getLegalActions(agentIndex)
-    for move in legalMoves:
-        successorState = gameState.generateSuccessor(agentIndex, move)
-        p = (1 / legalMoves.__len__())
-        v += p * exptimaxValue(successorState, agentIndex + 1, depth)
-    return v  
 
 class ExpectimaxAgent(MultiAgentSearchAgent):
     """
       Your expectimax agent (question 4)
     """
+    def exptimaxValue(self, gameState: GameState, agentIndex: int, depth: int):
+        if agentIndex >= gameState.getNumAgents():
+            agentIndex = 0
+            depth -= 1
 
+        if gameState.isWin() or gameState.isLose() or depth == 0:
+            return self.evaluationFunction(gameState)
+
+        if agentIndex == 0:
+            return self.expMaxValue(gameState, agentIndex, depth)
+        return self.expValue(gameState, agentIndex, depth)
+
+    def expMaxValue(self, gameState: GameState, agentIndex: int, depth: int):
+        v = -99999999
+        legalMoves = gameState.getLegalActions(agentIndex)
+        for move in legalMoves:
+            successorState = gameState.generateSuccessor(agentIndex, move)
+            v = max(v, self.exptimaxValue(successorState, agentIndex + 1, depth))
+        return v
+
+    def expValue(self, gameState: GameState, agentIndex: int, depth: int):
+        v = 0
+        legalMoves = gameState.getLegalActions(agentIndex)
+        for move in legalMoves:
+            successorState = gameState.generateSuccessor(agentIndex, move)
+            p = (1 / legalMoves.__len__())
+            v += p * self.exptimaxValue(successorState, agentIndex + 1, depth)
+        return v  
+    
     def getAction(self, gameState: GameState):
         """
         Returns the expectimax action using self.depth and self.evaluationFunction
@@ -288,7 +288,7 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
         highestMove = None
         for move in legalMoves:
             successorState = gameState.generateSuccessor(0, move)
-            currValue = exptimaxValue(successorState, 1, self.depth)
+            currValue = self.exptimaxValue(successorState, 1, self.depth)
             if currValue > highestValue:
                 highestValue = currValue
                 highestMove = move
@@ -298,16 +298,37 @@ def betterEvaluationFunction(currentGameState: GameState):
     """
     Your extreme ghost-hunting, pellet-nabbing, food-gobbling, unstoppable
     evaluation function (question 5).
-
-    DESCRIPTION: <write something here so we know what you did>
     """
     pacPos = currentGameState.getPacmanPosition()
     foodList = currentGameState.getFood().asList()
     ghostStates = currentGameState.getGhostStates()
-    scaredTimes = [ghostState.scaredTimer for ghostState in ghostStates]
-    print(getClosestFood(pacPos, foodList))
-    evaluation = currentGameState.getScore() - getClosestFood(pacPos, foodList) * 3 + sum(scaredTimes) - foodList.__len__() * 3
-    print(evaluation)
+    capsules = currentGameState.getCapsules()
+    
+    # Score
+    evaluation = currentGameState.getScore()
+    
+    # Food
+    if foodList:
+        closestFoodDist = getClosestFood(pacPos, foodList)
+        evaluation -= closestFoodDist
+        evaluation -= len(foodList) * 4
+    
+    # Ghosts
+    for ghost in ghostStates:
+        ghostPos = ghost.getPosition()
+        ghostDist = manhattanDistance(pacPos, ghostPos)
+        
+        if ghost.scaredTimer > 0:
+            if ghostDist <= ghost.scaredTimer:
+                evaluation += 100 / (ghostDist + 1)
+        elif ghostDist <= 1:
+            evaluation -= 500
+    
+    # Power pellets
+    if capsules:
+        closestCapsuleDist = min([manhattanDistance(pacPos, cap) for cap in capsules])
+        evaluation += 10 / (closestCapsuleDist + 1)
+    
     return evaluation
 
 # Abbreviation
