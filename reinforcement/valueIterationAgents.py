@@ -60,10 +60,16 @@ class ValueIterationAgent(ValueEstimationAgent):
         self.runValueIteration()
 
     def runValueIteration(self):
-        print("runValueIteration mdp state", self.mdp.getStates())
-        print("getPossibleActions ", self.mdp.getPossibleActions(self.mdp.getStates()[2]))
-        print("getTransitionStatesAndProbs ", self.mdp.getTransitionStatesAndProbs(self.mdp.getStates()[2], "north"))
-        print("getReward ", self.mdp.getReward(self.mdp.getStates()[2], "north", self.mdp.getStates()[3]))
+        #We are going to use the counter
+        #The key for the counter is going to be a tuple (state,action)
+        #The value for the counter is going to be the q value for that pair
+        #q values are initialized to 0
+        #To find the V values we get the possible actions from the given state and find the max from there
+        i = 0
+        while (i < self.iterations):
+            for state in self.mdp.getStates():
+
+            i += 1
 
 
     def getValue(self, state):
@@ -78,12 +84,14 @@ class ValueIterationAgent(ValueEstimationAgent):
           Compute the Q-value of action in state from the
           value function stored in self.values.
         """
-        resultValue = 0
-        for action in self.mdp.getPossibleActions(state):
-            tValue = self.mdp.getTransitionStatesAndProbs(state, action)
-            resultValue += tValue*
-                                                 
-        return self.mdp.getReward(state, "north", self.mdp.getStates()[3]) + self.discount * max(self.getValue(state))
+        nextQ = 0
+        nextStatesArray = self.mdp.getTransitionStatesAndProbs(state, action)
+        for nextState in nextStatesArray:
+            sPrime, t = nextState
+            r = self.mdp.getReward(state, action, sPrime)
+            nextQ += t * (r + self.discount * self.getValue(sPrime))
+                               
+        return nextQ
 
     def computeActionFromValues(self, state):
         """
@@ -95,7 +103,24 @@ class ValueIterationAgent(ValueEstimationAgent):
           terminal state, you should return None.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        #Initalize
+        #Check for possible actions
+        possibleActions = self.mdp.getPossibleActions(state)
+        policy = None
+        value = 0
+
+        #If no actions are possible return None
+        if len(possibleActions) == 0:
+            return policy
+        
+        #Get the max Q value for every action and update the policy
+        for action in possibleActions:
+            curr = self.computeQValueFromValues(state, action)
+            if curr > value:
+                value = curr
+                policy = action
+    
+        return policy
 
     def getPolicy(self, state):
         return self.computeActionFromValues(state)
