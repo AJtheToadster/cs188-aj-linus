@@ -53,7 +53,7 @@ class ValueEstimationAgent(Agent):
         """
         Should return Q(state,action)
         """
-        util.raiseNotDefined()
+        print("In get Q value: ",state,action)
 
     def getValue(self, state):
         """
