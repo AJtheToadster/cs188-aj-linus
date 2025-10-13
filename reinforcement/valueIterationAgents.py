@@ -151,5 +151,25 @@ class PrioritizedSweepingValueIterationAgent(ValueIterationAgent):
         ValueIterationAgent.__init__(self, mdp, discount, iterations)
 
     def runValueIteration(self):
-        "*** YOUR CODE HERE ***"
+        ##Compute Predecessors
+        #self.mdp.getStartState()
+        #queue = util.PriorityQueue()
+        #states = self.mdp.getStates()
+        #for s in states:
+        #    currValue = self.values[s]
+        #    possibleActions = self.mdp.getPossibleActions(s)
+        #    value = -999999999
+        #    for action in possibleActions:
+        #        curr = self.computeQValueFromValues(s, action)
+        #        if curr > value:
+        #            value = curr
+        #    diff = value
+        #    queue.push(s, -1 * diff)
+        #    for i in range(self.iterations):
+        #        if queue.isEmpty():
+        #            return
+        #        s = queue.pop()
+        #        if not self.mdp.isTerminal(s):
+        #            
+        return None
 
