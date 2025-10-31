@@ -102,7 +102,14 @@ def joinFactors(factors: List[Factor]):
 
 
     "*** YOUR CODE HERE ***"
-    raiseNotDefined()
+    #uninterestingFactors
+    print(factors)
+    for factor in factors:
+        print("\n All assignments \n",factor.getAllPossibleAssignmentDicts(),
+              "\n Unconditioned \n",factor.unconditionedVariables(),
+              "\n Conditioned \n", factor.conditionedVariables(),
+              "\n Domains \n", factor.variableDomainsDict(),
+                "\n get \n", factor.getProbability({'W':'rain', 'D': 'wet'}))
     "*** END YOUR CODE HERE ***"
 
 ########### ########### ###########
