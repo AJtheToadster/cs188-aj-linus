@@ -102,14 +102,26 @@ def joinFactors(factors: List[Factor]):
 
 
     "*** YOUR CODE HERE ***"
-    #uninterestingFactors
-    print(factors)
+    unconditionedVars = set()
+    conditionedVars = set()
+
     for factor in factors:
-        print("\n All assignments \n",factor.getAllPossibleAssignmentDicts(),
-              "\n Unconditioned \n",factor.unconditionedVariables(),
-              "\n Conditioned \n", factor.conditionedVariables(),
-              "\n Domains \n", factor.variableDomainsDict(),
-                "\n get \n", factor.getProbability({'W':'rain', 'D': 'wet'}))
+        unconditionedVars.update(factor.unconditionedVariables())
+        conditionedVars.update(factor.conditionedVariables())
+
+    conditionedVars.difference_update(unconditionedVars)
+
+    factors = list(factors)
+    variable_domains_dict = factors[0].variableDomainsDict()
+    resultingJoinFactor = Factor(unconditionedVars, conditionedVars, variable_domains_dict)
+
+    for i in resultingJoinFactor.getAllPossibleAssignmentDicts():
+        prob = 1.0
+        for factor in factors:
+            prob *= factor.getProbability(i)
+        resultingJoinFactor.setProbability(i, prob)
+
+    return resultingJoinFactor
     "*** END YOUR CODE HERE ***"
 
 ########### ########### ###########
@@ -166,4 +178,3 @@ def eliminateWithCallTracking(callTrackingList=None):
     return eliminate
 
 eliminate = eliminateWithCallTracking()
-
