@@ -205,8 +205,8 @@ def inferenceByVariableEliminationWithCallTracking(callTrackingList=None):
                 cpts = notJoinedFactors
                 cpts.append(joinedFactor)
             cpts = notJoinedFactors
-            cpts.append(joinedFactor)
-        return cpts
+        cpts = joinFactors(cpts)
+        return normalize(cpts)
         "*** END YOUR CODE HERE ***"
 
 
