@@ -51,6 +51,12 @@ class PerceptronModel(Module):
         Return a Parameter instance with the current weights of the perceptron.
         """
         return self.w
+    
+    def update_weights(self, direction, magnitude):
+        """
+        Updates the weights based on magnitude and direction
+        """
+        self.w -= direction * magnitude
 
     def forward(self, x):
         """
@@ -63,7 +69,8 @@ class PerceptronModel(Module):
         The pytorch function `tensordot` may be helpful here.
         """
         "*** YOUR CODE HERE ***"
-        return tensordot(self.w, x)
+        x_flat = x.flatten()
+        return tensordot(self.w, x_flat, dims=1)
 
         
 
@@ -76,9 +83,7 @@ class PerceptronModel(Module):
         score = self(x)
 
         "*** YOUR CODE HERE ***"
-        if (score >= 0):
-            return 1
-        return -1
+        return 1 if score.item() >= 0 else -1
 
 
 
@@ -299,4 +304,3 @@ class Attention(Module):
         B, T, C = input.size()
 
         """YOUR CODE HERE"""
-

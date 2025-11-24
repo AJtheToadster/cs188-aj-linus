@@ -31,14 +31,17 @@ def train_perceptron(model, dataset):
     with no_grad():
         dataloader = DataLoader(dataset, batch_size=1, shuffle=True)
         "*** YOUR CODE HERE ***"
-        hasError = False
-        while not hasError:
-            hasError = False
+        hasError = True
+        while hasError:
+            enteredNest = False
             for i in dataloader:
-                curr = (model(i.get('x')), i.get('label'))
+                curr = (model.get_prediction(model(i.get('x'))), i.get('label'))
                 if not curr[0] == curr[1]:
-                    hasError == True
-
+                    enteredNest = True
+                    model.update_weights(curr[0], i.get('x'))
+            if not enteredNest:
+                hasError = False
+            
 
 def train_regression(model, dataset):
     """
