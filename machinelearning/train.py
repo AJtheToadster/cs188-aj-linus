@@ -59,6 +59,30 @@ def train_regression(model, dataset):
         
     """
     "*** YOUR CODE HERE ***"
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
+    #print(len(dataset)) #200 examples
+    dataloader = DataLoader(dataset, batch_size=model.batchSize, shuffle=True)
+
+    currLoss = float("inf")
+
+    while currLoss > model.goalLoss:
+        batchCont = 0
+        totalLoss = 0
+        for batch in dataloader:
+            x = batch.get("x")
+            y = batch.get("label")
+
+            #used recommended website: https://pytorch.org/docs/stable/optim.html
+            optimizer.zero_grad()
+            predicted_y = model(x)
+            lossTensor = regression_loss(predicted_y, y)
+            lossTensor.backward()
+            optimizer.step()
+
+            totalLoss += lossTensor.data
+            batchCont += 1
+
+        currLoss = totalLoss / batchCont
 
 
 def train_digitclassifier(model, dataset):

@@ -98,7 +98,12 @@ class RegressionModel(Module):
         # Initialize your model parameters here
         "*** YOUR CODE HERE ***"
         super().__init__()
-   
+
+        self.batchSize = 2
+        self.goalLoss = 0.02
+        self.layer1 = Linear(1, 128)
+        self.layer2 = Linear(128, 128)
+        self.layer3 = Linear(128, 1)
 
     def forward(self, x):
         """
@@ -110,6 +115,10 @@ class RegressionModel(Module):
             A node with shape (batch_size x 1) containing predicted y-values
         """
         "*** YOUR CODE HERE ***"
+        hidden1 = relu(self.layer1(x))
+        hidden2 = relu(self.layer2(hidden1))
+        result = self.layer3(hidden2)
+        return result
 
 
 class DigitClassificationModel(Module):
