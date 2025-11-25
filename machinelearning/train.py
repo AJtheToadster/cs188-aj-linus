@@ -90,7 +90,28 @@ def train_digitclassifier(model, dataset):
     Trains the model.
     """
     model.train()
-    """ YOUR CODE HERE """
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
+    currLoss = float("inf")
+
+    while currLoss > model.goalLoss:
+        dataloader = DataLoader(dataset, batch_size=model.batchSize, shuffle=True)
+        total_loss = 0.0
+        batchCount = 0
+
+        for batch in dataloader:
+            x = batch.get("x")
+            y = batch.get("label")
+
+            optimizer.zero_grad()
+            score = model(x)
+            loss = digitclassifier_loss(score, y)
+            loss.backward()
+            optimizer.step()
+
+            total_loss += loss.item()
+            batchCount += 1
+
+        currLoss = total_loss / batchCount
 
 
 def train_languageid(model, dataset):
