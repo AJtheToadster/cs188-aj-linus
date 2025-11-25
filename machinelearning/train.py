@@ -95,7 +95,7 @@ def train_digitclassifier(model, dataset):
 
     while currLoss > model.goalLoss:
         dataloader = DataLoader(dataset, batch_size=model.batchSize, shuffle=True)
-        total_loss = 0.0
+        total_loss = 0
         batchCount = 0
 
         for batch in dataloader:
