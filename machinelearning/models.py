@@ -263,12 +263,8 @@ def Convolve(input: tensor, weight: tensor):
     #Loop over all result values:
     for i in range(y_dim):
         for j in range(x_dim):
-            curr = 0
-            #Calculate value
-            for a in range(0, weight_dimensions[0]):
-                for b in range(0, weight_dimensions[1]):
-                    curr += input[i + a, j + b] * weight[a, b]
-            Output_Tensor[i][j] = curr
+            mtx = input[i : i + weight_dimensions[0], j : j + weight_dimensions[1]]
+            Output_Tensor[i, j] = tensordot(mtx, weight, dims=2)
     "*** End Code ***"
     return Output_Tensor
 
