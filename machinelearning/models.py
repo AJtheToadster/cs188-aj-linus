@@ -350,3 +350,18 @@ class Attention(Module):
         B, T, C = input.size()
 
         """YOUR CODE HERE"""
+        k = self.k_layer(input)
+        q = self.q_layer(input)
+        v = self.v_layer(input)
+
+        scores = matmul(q, movedim(k, 1, 2)) / (self.layer_size ** 0.5)
+        slice = self.mask[:, :, :T, :T]
+        positions = (slice == 0)
+        scores = scores.masked_fill(positions, float("-inf"))
+
+        scores = scores.squeeze(1)
+
+        weights = softmax(scores, dim = -1)
+        output = matmul(weights, v)
+        return output
+
