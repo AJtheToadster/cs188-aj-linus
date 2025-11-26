@@ -28,9 +28,7 @@ def digitclassifier_loss(y_pred, y):
         y: a node with shape (batch_size x 10)
     Returns: a loss tensor
     """
-    log_probs = y_pred.log_softmax(dim=1)
-    loss = -(y * log_probs).sum(dim=1).mean()
-    return loss.unsqueeze(0)
+    return cross_entropy(y_pred, y)
 
 
 def languageid_loss(y_pred, y):
@@ -48,6 +46,7 @@ def languageid_loss(y_pred, y):
     Returns: a loss node
     """
     "*** YOUR CODE HERE ***"
+    return cross_entropy(y_pred, y)
 
 
 def digitconvolution_Loss(y_pred, y):

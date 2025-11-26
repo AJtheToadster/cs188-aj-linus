@@ -187,6 +187,12 @@ class LanguageIDModel(Module):
         super(LanguageIDModel, self).__init__()
         "*** YOUR CODE HERE ***"
         # Initialize your model parameters here
+        self.batchSize = 32
+        self.goalAccuracy = 0.86
+        self.d = 128
+        self.inputToHidden = Linear(self.num_chars, self.d)
+        self.hToHidden = Linear(self.d, self.d)
+        self.hiddenToOutput = Linear(self.d, len(self.languages))
 
 
 
@@ -220,6 +226,13 @@ class LanguageIDModel(Module):
                 (also called logits)
         """
         "*** YOUR CODE HERE ***"
+        h = relu(self.inputToHidden(xs[0]))
+
+        for i in range(1, len(xs)):
+            h = relu(self.inputToHidden(xs[i]) + self.hToHidden(h))
+        
+        score = self.hiddenToOutput(relu(h))
+        return score
 
 
 
