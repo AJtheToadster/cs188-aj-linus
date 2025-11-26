@@ -161,3 +161,26 @@ def Train_DigitConvolution(model, dataset):
     Trains the model.
     """
     """ YOUR CODE HERE """
+    model.train()
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
+    currLoss = float("inf")
+
+    while currLoss > model.goalLoss:
+        dataloader = DataLoader(dataset, batch_size=model.batchSize, shuffle=True)
+        total_loss = 0
+        batchCount = 0
+
+        for batch in dataloader:
+            x = batch.get("x")
+            y = batch.get("label")
+
+            optimizer.zero_grad()
+            score = model(x)
+            loss = digitconvolution_Loss(score, y)
+            loss.backward()
+            optimizer.step()
+
+            total_loss += loss.item()
+            batchCount += 1
+
+        currLoss = total_loss / batchCount
